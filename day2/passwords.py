@@ -8,6 +8,13 @@ class Password:
     def get_char_appearance(self):
         return self.password.count(self.char)
 
+    def check_if_valid(self):
+        return self.minApp <= self.get_char_appearance() <= self.maxApp
+
+    def official_check_if_valid(self):
+        return (self.password[self.minApp-1] == self.char) ^ (self.password[self.maxApp-1] == self.char)
+
+
 passwords = []
 
 with open("passwords.txt", "r") as file:
@@ -21,8 +28,7 @@ with open("passwords.txt", "r") as file:
 def count_valid_passwords():
     count = 0
     for password in passwords:
-        char_app = password.get_char_appearance()
-        if char_app >= password.minApp and char_app <= password.maxApp:
+        if password.official_check_if_valid():
             count = count+1
     print(count)
 
