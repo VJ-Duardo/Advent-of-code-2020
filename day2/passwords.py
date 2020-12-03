@@ -1,7 +1,7 @@
 class Password:
-    def __init__(self, minApp, maxApp, char, password):
-        self.minApp = int(minApp)
-        self.maxApp = int(maxApp)
+    def __init__(self, min_app, max_app, char, password):
+        self.min_app = int(min_app)
+        self.max_app = int(max_app)
         self.char = char
         self.password = password
 
@@ -9,10 +9,10 @@ class Password:
         return self.password.count(self.char)
 
     def check_if_valid(self):
-        return self.minApp <= self.get_char_appearance() <= self.maxApp
+        return self.min_app <= self.get_char_appearance() <= self.max_app
 
     def official_check_if_valid(self):
-        return (self.password[self.minApp-1] == self.char) ^ (self.password[self.maxApp-1] == self.char)
+        return (self.password[self.min_app-1] == self.char) ^ (self.password[self.max_app-1] == self.char)
 
 
 passwords = []
