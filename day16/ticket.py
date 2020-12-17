@@ -48,26 +48,22 @@ def find_field_positions():
                     break
             if found:
                 fitting_positions[i].append(j)
-    
-    field_positions = {}
-    counter = 0
-    def spread_options(curr):
-        nonlocal counter
-        counter += 1
-        if len(curr) == len(fitting_positions):
-            return curr
-        
-        for field in fitting_positions[len(curr)]:
-            if field in curr:
-                continue
-            curr.append(field)
-            result = spread_options(curr)
-            if result != False:
-                return result
-            curr.pop()
-        return False
 
-    return spread_options([])
+    fitting_positions = dict(sorted(fitting_positions.items(), key=lambda item: len(item[1]), reverse=True))
+
+    field_positions = [-1]*len(own_ticket)
+    curr_claims = {}
+    while field_positions.count(-1) > 1:
+        for i in fitting_positions.keys():
+            while fitting_positions[i][0] in field_positions:
+                fitting_positions[i].pop(0)
+            curr_claims[fitting_positions[i].pop(0)] = i
+        for win in curr_claims.keys():
+            field_positions[curr_claims[win]] = win
+            del fitting_positions[curr_claims[win]]
+        curr_claims = {}
+
+    return field_positions
 
 
 def get_departure_product():
