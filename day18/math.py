@@ -1,5 +1,3 @@
-import re
-
 tasks = []
 with open("homework.txt") as file:
     tasks = [list(t.replace(" ", "")) for t in file.read().splitlines()]
