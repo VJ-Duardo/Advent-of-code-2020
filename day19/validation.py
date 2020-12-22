@@ -8,18 +8,21 @@ with open("messages.txt", "r") as file:
     messages = sections[1].split("\n")
 
 
-
-def validate(message):
+def validate(message, normal=True):
+    invalid = False
+    b = True
     def check(rule, msg):
+        nonlocal invalid, b
         if rules[rule] in ['a', 'b']:
             if(len(msg) == 0):
-                return (True, msg)
+                invalid = True
+                return (b, msg)
             if rules[rule] == msg[0]:
                 return (True, msg[1:])
             else:
                 return (False, msg)
-        backup = ''.join(list(msg).copy())
         for i in range(len(rules[rule])):
+            backup = ''.join(list(msg).copy())
             fits = True
             for j in range(len(rules[rule][i])):
                 result, msg = check(rules[rule][i][j], msg)
@@ -32,23 +35,30 @@ def validate(message):
                 msg = backup
         return (False, msg)
     result = check("0", message)
-    if len(result[1]) == 0:
-        print(message)
-        return True
-    else:
-        return False
+    if normal:
+        return len(result[1]) == 0
+    switch_list()
+    b = False
+    invalid = False
+    check("0", message)
+    switch_list()
+    return (len(result[1]) == 0 and not invalid)
+        
 
+def switch_list():
+    rules['8'][0], rules['8'][1] = rules['8'][1], rules['8'][0]
+    rules['11'][0], rules['11'][1] = rules['11'][1], rules['11'][0]
 
-def count_valid_messages():
+def count_valid_messages(normal=True):
     c = 0
     for msg in messages:
-        if validate(msg):
+        if validate(msg, normal):
             c += 1
     return c
 
-#print(count_valid_messages())
+print(count_valid_messages())
 
 rules['8'] = [['42'], ['42', '8']]
 rules['11'] = [['42', '31'], ['42', '11', '31']]
-print(count_valid_messages())
+print(count_valid_messages(False))
 
